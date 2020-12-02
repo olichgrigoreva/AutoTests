@@ -1,18 +1,24 @@
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.WebDriverRunner;
-import org.openqa.selenium.By;
+package test;
+
+import com.codeborne.selenide.Configuration;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import page.SignIn;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
+import static com.codeborne.selenide.WebDriverRunner.url;
 
-public class LoginTest extends TestBase {
+public class LoginTest {
+
+    @BeforeClass
+    public static void setup() {
+        Configuration.baseUrl = "https://home.openweathermap.org/users/sign_in";
+    }
 
     @DataProvider
     public Iterator<Object[]> autorizationData() {
@@ -23,9 +29,9 @@ public class LoginTest extends TestBase {
 
     @Test(dataProvider = "autorizationData")
     public void testLoginForm(String email, String password) {
-        open("https://home.openweathermap.org/users/sign_in");
-        $("#user_email").setValue(email);
-        $("#user_password").setValue(password).pressEnter();
+        SignIn signInPage = new SignIn();
+        signInPage.open();
+        signInPage.fillForm(email, password);
         Assert.assertEquals(url(), "https://home.openweathermap.org/");
     }
 }
