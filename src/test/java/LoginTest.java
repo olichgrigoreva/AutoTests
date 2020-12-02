@@ -1,3 +1,5 @@
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -6,6 +8,9 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.*;
 
 public class LoginTest extends TestBase {
 
@@ -16,11 +21,11 @@ public class LoginTest extends TestBase {
         return list.iterator();
     }
 
-    @Test(dataProvider = "autorizationData", enabled = false)
+    @Test(dataProvider = "autorizationData")
     public void testLoginForm(String email, String password) {
-        gotoUrl("https://home.openweathermap.org/users/sign_in");
-        fillLoginForm(email, password);
-        Assert.assertEquals(driver.getCurrentUrl(), "https://home.openweathermap.org/");
+        open("https://home.openweathermap.org/users/sign_in");
+        $("#user_email").setValue(email);
+        $("#user_password").setValue(password).pressEnter();
+        Assert.assertEquals(url(), "https://home.openweathermap.org/");
     }
-
 }

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.codeborne.selenide.Selenide.*;
+
 public class WeatherTest extends TestBase {
     @DataProvider
     public Iterator<Object[]> listOfCity() {
@@ -19,24 +21,15 @@ public class WeatherTest extends TestBase {
 
     @Test(dataProvider = "listOfCity")
     public void testWeather(String city) {
-
-        gotoUrl("https://openweathermap.org/");
-        useDegreeMetric("//label[@for='metric']");
-        enterCity(city);
-
-        String strCelsius = driver.findElement(By.cssSelector(".search-dropdown-menu > li > span:nth-child(2)")).getText();
+        open("https://openweathermap.org/");
+        $(By.xpath("//label[@for='metric']")).click();
+        $(By.cssSelector(".search-container > input")).setValue(city).pressEnter();
+        String strCelsius = $(By.cssSelector(".search-dropdown-menu > li > span:nth-child(2)")).getText();
         float celsiusDegrees = Integer.parseInt(strCelsius.replaceAll("[°CF]", ""));
-        System.out.println(celsiusDegrees);
-
-        useDegreeMetric("//label[@for='imperial']");
-        enterCity(city);
-
-        String strFahrenheit = driver.findElement(By.cssSelector(".search-dropdown-menu > li > span:nth-child(2)")).getText();
+        $(By.xpath("//label[@for='imperial']")).click();
+        $(By.cssSelector(".search-container > input")).setValue(city).pressEnter();
+        String strFahrenheit = $(By.cssSelector(".search-dropdown-menu > li > span:nth-child(2)")).getText();
         float fahrenheitDegrees = Integer.parseInt(strFahrenheit.replaceAll("[°CF]", ""));
-        System.out.println(fahrenheitDegrees);
-        System.out.println(celsiusToFahrenheit(celsiusDegrees));
-
         Assert.assertEquals(fahrenheitDegrees, celsiusToFahrenheit(celsiusDegrees));
     }
-
 }
