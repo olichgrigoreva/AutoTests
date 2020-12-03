@@ -1,4 +1,4 @@
-package test;
+package test.UI;
 
 import com.codeborne.selenide.Configuration;
 import org.testng.Assert;
