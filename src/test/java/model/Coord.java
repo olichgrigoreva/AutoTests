@@ -1,8 +1,9 @@
-package test.API;
+package model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Clouds {
-    public int all;
+public class Coord {
+    public double lat;
+    public double lon;
 }
